@@ -5,6 +5,7 @@ const Reproductor = (props) => {
     const playClasses = {
         play: "fa-solid fa-play",
         pause: "fa-solid fa-pause"
+
     }
 
     return (

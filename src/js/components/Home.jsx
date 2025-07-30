@@ -7,6 +7,8 @@ import Navbar from './Navbar';
 
 //create your first component
 const Home = () => {
+
+     
   const [url] = useState("https://playground.4geeks.com")
 
   const [songs, setSongs] = useState([
@@ -41,7 +43,35 @@ const Home = () => {
       "category": "category"
     }])
 
- 
+  const getSongs = () => {
+        fetch('https://playground.4geeks.com/sound/songs', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                console.log(response)
+                console.log(response.status)
+
+                if (response.status === 404) throw Error("Pagina no encontrada")
+
+                return response.json()
+            })
+            .then((responseJson) => {
+                console.log(responseJson)
+                setSongs(responseJson.songs)
+            })
+            .catch((error) => {
+                console.error(error.message)
+            })
+    }
+
+    useEffect(() => {
+        getSongs()
+    }, [])
+
+
   const songRef = useRef()
   const [playing, setPlaying] = useState("play")
   const [currentSong, setCurrentSong]= useState(null)
@@ -104,7 +134,7 @@ const Home = () => {
         </div>
         <div className=" w-100 overflow-y-scroll" >
           {
-            songs.map((song, index) =>
+              songs.map((song, index) =>
               <div className="d-flex border-top border-secondary" key={index} onClick={() =>loadSong(index)}>
                 <div className="col-1 text-white p-2"  >{song.id}</div>
                 <div className="col-9 text-white text-start p-2">{song.name}</div>
